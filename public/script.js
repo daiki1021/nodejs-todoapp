@@ -1,13 +1,29 @@
 const tasksDOM = document.querySelector(".tasks");
 const formDOM = document.querySelector(".task-form");
 const taskInputDOM = document.querySelector(".task-input");
+const taskCategoryDOM = document.querySelector(".task-category");
+const taskDueDateDOM = document.querySelector(".task-due-date");
 const formAlertDOM = document.querySelector(".form-alert");
 
-// /api/v1/tasksからタスクを読み込む
-const showTasks = async () =>{
+// フィルター要素
+const categoryFilterDOM = document.querySelector(".category-filter");
+const completedFilterDOM = document.querySelector(".completed-filter");
+const filterBtnDOM = document.querySelector(".filter-btn");
+const resetBtnDOM = document.querySelector(".reset-btn");
+
+// /api/v1/tasksからタスクを読み込む（フィルター機能付き）
+const showTasks = async (filters = {}) =>{
     try{
+       // クエリパラメータを構築
+       const queryParams = new URLSearchParams();
+       if (filters.category) queryParams.append('category', filters.category);
+       if (filters.completed) queryParams.append('completed', filters.completed);
+       
+       const queryString = queryParams.toString();
+       const url = queryString ? `/api/v1/tasks?${queryString}` : '/api/v1/tasks';
+       
        //自作のAPIを叩く
-       const { data: tasks } = await axios.get("/api/v1/tasks");
+       const { data: tasks } = await axios.get(url);
        
 //タスクが一つもないとき
        if(tasks.length < 1){
@@ -16,12 +32,23 @@ const showTasks = async () =>{
        }
        //タスクを出力
        const allTasks = tasks.map((task) => {
-        const{ completed, _id, name}= task;
+        const{ completed, _id, name, category, dueDate}= task;
+        
+        // 期限の表示フォーマット
+        const dueDateDisplay = dueDate ? 
+            `<small class="due-date">期限: ${new Date(dueDate).toLocaleDateString('ja-JP')}</small>` : 
+            '';
         
                 return `<div class="single-task ${completed && "task-completed"}">
-                <h5>
-                    <span><i class="fas fa-check-circle"></i></span>${name}
-                </h5>
+                <div class="task-info">
+                    <h5>
+                        <span><i class="fas fa-check-circle"></i></span>${name}
+                    </h5>
+                    <div class="task-details">
+                        <small class="category">カテゴリー: ${category}</small>
+                        ${dueDateDisplay}
+                    </div>
+                </div>
                 <div class="task-links">
                   <!-- 編集リンク -->
                   <a href="edit.html?id=${_id}" class="edit-link">
@@ -49,10 +76,19 @@ showTasks();
 formDOM.addEventListener("submit", async (event) =>{
     event.preventDefault();
     const name = taskInputDOM.value;
+    const category = taskCategoryDOM.value;
+    const dueDate = taskDueDateDOM.value || null;
+    
     try{
-        await axios.post("/api/v1/tasks", {name: name});
+        await axios.post("/api/v1/tasks", {
+            name: name,
+            category: category,
+            dueDate: dueDate
+        });
         showTasks();
         taskInputDOM.value="";
+        taskCategoryDOM.value="その他";
+        taskDueDateDOM.value="";
         formAlertDOM.style.display = "block";
         formAlertDOM.textContent = "タスクを追加しました"
         formAlertDOM.classList.add("text-success");
@@ -81,3 +117,23 @@ tasksDOM.addEventListener("click", async (event) =>{
         }
     }
 })
+
+// フィルター機能
+const applyFilters = () => {
+    const filters = {
+        category: categoryFilterDOM.value !== 'all' ? categoryFilterDOM.value : null,
+        completed: completedFilterDOM.value !== 'all' ? completedFilterDOM.value : null
+    };
+    
+    showTasks(filters);
+};
+
+// フィルターボタンのイベントリスナー
+filterBtnDOM.addEventListener("click", applyFilters);
+
+// リセットボタンのイベントリスナー
+resetBtnDOM.addEventListener("click", () => {
+    categoryFilterDOM.value = 'all';
+    completedFilterDOM.value = 'all';
+    showTasks();
+});

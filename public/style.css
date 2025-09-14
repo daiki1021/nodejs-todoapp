@@ -116,10 +116,79 @@ textarea {
 }
 
 .submit-btn {
-  width: 20%;
+  width: 100%;
   margin-top: 1rem;
-  margin-left: 50%;
-  transform: translateX(-50%);
+}
+
+.form-control {
+  margin-bottom: 1rem;
+}
+
+.form-control label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.form-control select,
+.form-control input[type="date"] {
+  width: 100%;
+  padding: 0.375rem 0.75rem;
+  border-radius: var(--borderRadius);
+  background: var(--grey-50);
+  border: 1px solid var(--grey-300);
+}
+
+/*************
+    フィルター
+*************/
+.filter-container {
+  width: 90vw;
+  max-width: var(--fixed-width);
+  margin: 2rem auto;
+  background: var(--white);
+  border-radius: var(--borderRadius);
+  box-shadow: var(--shadow-2);
+  padding: 1.5rem;
+}
+
+.filter-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  align-items: end;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.search-input,
+.category-filter,
+.completed-filter,
+.sort-filter {
+  padding: 0.375rem 0.75rem;
+  border-radius: var(--borderRadius);
+  background: var(--grey-50);
+  border: 1px solid var(--grey-300);
+  width: 100%;
+}
+
+.filter-btn,
+.reset-btn {
+  padding: 0.375rem 0.75rem;
+  height: fit-content;
+}
+
+.reset-btn {
+  background: var(--grey-300);
+  color: var(--textColor);
+}
+
+.reset-btn:hover {
+  background: var(--grey-1000);
+  color: var(--white);
 }
 
 /*************
@@ -167,6 +236,28 @@ textarea {
   height: 0.5rem;
   margin-left: -1.25rem;
   margin-right: 1.5rem;
+}
+
+.task-info {
+  flex: 1;
+}
+
+.task-details {
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.task-details small {
+  color: var(--grey-1000);
+  opacity: 0.7;
+  font-size: 0.8rem;
+}
+
+.due-date {
+  color: var(--red-dark) !important;
+  font-weight: bold;
 }
 
 .single-task .fa-check-circle {

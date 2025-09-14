@@ -2,8 +2,24 @@ const Task = require("../models/Task");
 
 const getAllTasks = async (req,res) =>{
     try{
-     const allTask = await Task.find({});
-     res.status(200).json(allTask);
+        const { category, completed } = req.query;
+        
+        // フィルター条件を構築
+        let filter = {};
+        
+        // カテゴリーフィルター
+        if (category && category !== 'all') {
+            filter.category = category;
+        }
+        
+        // 完了状態フィルター
+        if (completed !== undefined && completed !== 'all') {
+            filter.completed = completed === 'true';
+        }
+        
+        // デフォルトは作成日時の降順でソート
+        const allTask = await Task.find(filter).sort({ _id: -1 });
+        res.status(200).json(allTask);
     } catch (err) {
         res.status(500).json(err);
     }

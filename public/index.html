@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NOode.jsとMongoDBを使ったTodoアプリ</title>
+    <title>Node.jsとMongoDBを使ったTodoアプリ</title>
     <link rel="stylesheet" href="style.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
@@ -11,15 +11,52 @@
 <body>
     <form class="task-form">
         <h4>NodejsでTodoアプリ</h4>
-        <div class="'form-control">
+        <div class="form-control">
             <input type="text" 
              name="name" 
              class="task-input" 
              placeholder="例:Node.jsの勉強" />
-             <button type="submit" class="btn submit-btn">送信</button>
         </div>
+        <div class="form-control">
+            <label for="category">カテゴリー</label>
+            <select name="category" class="task-category">
+                <option value="その他">その他</option>
+                <option value="仕事">仕事</option>
+                <option value="プライベート">プライベート</option>
+                <option value="勉強">勉強</option>
+            </select>
+        </div>
+        <div class="form-control">
+            <label for="dueDate">期限</label>
+            <input type="date" name="dueDate" class="task-due-date" />
+        </div>
+        <button type="submit" class="btn submit-btn">送信</button>
         <div class="form-alert"></div>
     </form>
+
+    <!-- フィルター機能 -->
+    <div class="filter-container">
+        <div class="filter-form">
+            <div class="filter-group">
+                <select class="category-filter">
+                    <option value="all">全てのカテゴリー</option>
+                    <option value="仕事">仕事</option>
+                    <option value="プライベート">プライベート</option>
+                    <option value="勉強">勉強</option>
+                    <option value="その他">その他</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <select class="completed-filter">
+                    <option value="all">全ての状態</option>
+                    <option value="false">未完了</option>
+                    <option value="true">完了済み</option>
+                </select>
+            </div>
+            <button type="button" class="btn filter-btn">フィルター</button>
+            <button type="button" class="btn reset-btn">リセット</button>
+        </div>
+    </div>
 
     <section class="tasks-container">
         <div class="tasks"></div>

@@ -11,6 +11,15 @@ const TaskSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
+    category: {
+        type: String,
+        enum: ["仕事", "プライベート", "勉強", "その他"],
+        default: "その他",
+    },
+    dueDate: {
+        type: Date,
+        default: null,
+    },
 });
 
 module.exports = mongoose.model("Task",TaskSchema)
